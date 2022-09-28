@@ -1,4 +1,4 @@
-function [ CNs_connection, cns_val, VNs_connection, vns_val] = genConnMat_qary( q, Bsp )
+function [ CNs_connection, cns_val, VNs_connection, vns_val] = genConnMat_qary( q, Bsp, tab )
 %GENCONNMAT 生成 CN 和 VN 的连接关系矩阵
 %   q:      素数
 %   Bsp:    基矩阵
@@ -6,6 +6,9 @@ function [ CNs_connection, cns_val, VNs_connection, vns_val] = genConnMat_qary( 
 %                   index 是 GF(q) 中的元素
 %                   value 是 元素对应 root 的 power
 
+if nargin < 3
+    tab = Bsp;
+end
 [g, r] = size(Bsp);
 
 CNs_connection = zeros((q-1)*g, r);
@@ -25,7 +28,7 @@ for iii = 1:g
                 % 再考虑循环移位得出最终的 VN 的 index
                 VN_index = mod(index + (sub_i - 1), q-1) + (jjj - 1) * (q - 1) + 1; % 序号从 1 开始 0用来表示不存在连接 只是为了占位
                 CNs_connection(row, jjj) = VN_index;
-                cns_val(row, jjj) = index;
+                cns_val(row, jjj) = tab(iii, jjj);
             end
         end
     end
